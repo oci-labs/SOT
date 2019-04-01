@@ -89,11 +89,12 @@ def main(model='./test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tfli
               bbox = list()
               scores = list()
               if ans:
-                
+                print(ans)
                 for obj in ans:
                   nPerson = nPerson+ 1
                   if labels:
                     print(labels[obj.label_id])
+                  score = obj.score
                   print ('score = ', obj.score)
                   box = obj.bounding_box.flatten().tolist()
                   print ('box = ', box)
@@ -108,13 +109,18 @@ def main(model='./test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tfli
                 #   subprocess.Popen(['feh', output_name])
                 # else:
                 #   print ('Please check ', output_name)
-                bbox.append(box)
-                scores.append(scores)
-                msg = {"nPersons":len(ans), "bounding_box":bbox}
+                  bbox.append(box)
+                  scores.append(score)
+                # msg = {"nPersons":float(len(ans)), "bounding_box":str(bbox), "scores": str(scores)}
+                print("nPerson = " + str(nPerson))
+                msg = {"nPersons":int(nPerson)}
+                # print(msg)
                 return msg
               else:
                 print ('No object detected!')
-                msg = {"nPersons":0, "bounding_box":bbox}
+                # msg = {"nPersons":float(0), "bounding_box":str(bbox), "scores": str(scores)}
+                msg = {"nPersons":int(nPerson)}
+                # print(msg)
                 return msg
       finally:
           camera.stop_preview()

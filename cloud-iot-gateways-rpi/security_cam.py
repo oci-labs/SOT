@@ -101,20 +101,21 @@ try:
         t = random.randint(0, 50)
         t = t * 9.0 / 5 + 32
 
-        result = call_python_version("3.5", "edgetpu.demo.classify_capture", "main",
-                                     ['./edgetpu/test_data/inception_v2_224_quant_edgetpu.tflite',
-                                      './edgetpu/test_data/imagenet_labels.txt'])
+        result = call_python_version("3.5", "edgetpu.demo.object_detection", "main",
+                                     ['./edgetpu/test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite'])
 
-        print(result["val"])
-        print(result["label"])
+        print(result["nPersons"])
+        # print(result["scores"])
 
-        value = "{:.3f}".format(result["val"])
+        nPersons = "{:.3f}".format(result["nPersons"])
         #    t = "{:.3f}".format(t)
-        sys.stdout.write('\r >>' + bcolors.CGREEN + bcolors.BOLD +
-                         'Object: {}, Val: {}'.format(result["label"], value) + bcolors.ENDC + ' <<')
-        sys.stdout.flush()
+        # sys.stdout.write('\r >>' + bcolors.CGREEN + bcolors.BOLD +
+        #   'nPersons: {}'.format(nPersons) + bcolors.ENDC + ' <<')
+        #   # 'Object: {}, Val: {}'.format(result["label"], value) + bcolors.ENDC + ' <<')
+        #   # 
+        # sys.stdout.flush()
 
-        info = {'device': '{}'.format(device_id)}
+        info = {'nPersons': '{}'.format(nPersons)}
         # info = json.dumps(info)
 
         message = MakeMessage(device_id=device_id, action='event', data=info)
