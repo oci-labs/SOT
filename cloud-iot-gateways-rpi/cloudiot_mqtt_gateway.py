@@ -37,7 +37,7 @@ udpSerSock.bind(ADDR)
 
 class GatewayState:
   # This is the topic that the device will receive configuration updates on.
-  mqtt_config_topic = 'cam-telemetry'
+  mqtt_config_topic = 'gateway-telemetry'
 
   # Host the gateway will connect to
   mqtt_bridge_hostname = ''
@@ -51,7 +51,7 @@ class GatewayState:
   pending_subscribes = {}
 
   # for all SUBSCRIPTIONS. The key is subscription topic.
-  subscriptions = {}
+  subscriptions = "sot-subscription"
 
   # Indicates if MQTT client is connected or not
   connected = False
@@ -290,6 +290,10 @@ def main():
 
       print('Sending telemetry event for device {}'.format(device_id))
       payload = command["data"]
+      payload = json.dumps(payload)
+      print("**************************************")
+      print(payload)
+      print(type(payload))
       mqtt_topic = '/devices/{}/{}'.format(device_id,  'events')
       print('Publishing message to topic {} with payload \'{}\''.format(
           mqtt_topic, payload))
