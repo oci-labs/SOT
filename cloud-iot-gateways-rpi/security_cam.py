@@ -22,6 +22,7 @@ import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
 import random
+import json
 #from 
 
 import execnet
@@ -112,8 +113,11 @@ try:
                        'Object: {}, Val: {}'.format(result["label"],value)  + bcolors.ENDC + ' <<')
     sys.stdout.flush()
 
-    message = MakeMessage(device_id, 'event',
-                'objectname={}, predictionvalue={}'.format(result["label"], value))
+    message = {'device': device_id}
+    message = json.dumps(message)
+
+    # message = MakeMessage(device_id, 'event',
+    #             'objectname={}, predictionvalue={}'.format(result["label"], value))
 
     SendCommand(client_sock, message, False)
     time.sleep(2)
