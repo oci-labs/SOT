@@ -37,7 +37,7 @@ udpSerSock.bind(ADDR)
 
 class GatewayState:
   # This is the topic that the device will receive configuration updates on.
-  mqtt_config_topic = ''
+  mqtt_config_topic = 'cam-telemetry'
 
   # Host the gateway will connect to
   mqtt_bridge_hostname = ''
@@ -283,6 +283,7 @@ def main():
       continue
 
     action = command["action"]
+    # action = 'event'
     device_id = command["device"]
 
     if action == 'event':
