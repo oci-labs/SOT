@@ -114,7 +114,7 @@ try:
                          'Object: {}, Val: {}'.format(result["label"], value) + bcolors.ENDC + ' <<')
         sys.stdout.flush()
 
-        info = {'device': device_id}
+        info = {'device': '{}'.format(device_id)}
         # info = json.dumps(info)
 
         message = MakeMessage(device_id=device_id, action='event', data=info)
