@@ -9,12 +9,12 @@ import picamera
 import edgetpu.classification.engine
 
 
-def main():
+def main(model='test_data/inception_v2_224_quant_edgetpu.tflite', label='test_data/imagenet_labels.txt'):
     parser = argparse.ArgumentParser()
     parser.add_argument(
-      '--model', help='File path of Tflite model.', required=True)
+      '--model', help='File path of Tflite model.', default = model)
     parser.add_argument(
-      '--label', help='File path of label file.', required=True)
+      '--label', help='File path of label file.', default = label)
     args = parser.parse_args()
 
     with open(args.label, 'r') as f:
@@ -43,6 +43,8 @@ def main():
                 if results:
                     camera.annotate_text = "%s %.2f\n%.2fms" % (labels[results[0][0]], results[0][1], elapsed_ms*1000.0)
                     print(camera.annotate_text)
+#                    camera.annotate_text = "%s %.2f" % (labels[results[0][0]], results[0][1], elapsed_ms*1000.0)
+                    return {"label":labels[results[0][0]], "val":float(results[0][1])}
         finally:
             camera.stop_preview()
 

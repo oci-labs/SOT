@@ -24,6 +24,11 @@ import subprocess
 from edgetpu.detection.engine import DetectionEngine
 from PIL import Image
 from PIL import ImageDraw
+import picamera
+import io
+import time
+import numpy as np
+# import cv2
 
 
 # Function to read labels from text files.
@@ -58,36 +63,52 @@ def main():
   engine = DetectionEngine(args.model)
   labels = ReadLabelFile(args.label) if args.label else None
 
-  # Open image.
-  img = Image.open(args.input)
-  draw = ImageDraw.Draw(img)
-
-  # Run inference.
-  ans = engine.DetectWithImage(img, threshold=0.05, keep_aspect_ratio=True,
-                               relative_coord=False, top_k=10)
-
-  # Display result.
-  if ans:
-    for obj in ans:
-      print ('-----------------------------------------')
-      if labels:
-        print(labels[obj.label_id])
-      print ('score = ', obj.score)
-      box = obj.bounding_box.flatten().tolist()
-      print ('box = ', box)
-      # Draw a rectangle.
-      draw.rectangle(box, outline='red')
-    img.save(output_name)
-    if platform.machine() == 'x86_64':
-      # For gLinux, simply show the image.
-      img.show()
-    elif platform.machine() == 'armv7l':
-      # For Raspberry Pi, you need to install 'feh' to display image.
-      subprocess.Popen(['feh', output_name])
-    else:
-      print ('Please check ', output_name)
-  else:
-    print ('No object detected!')
+  with picamera.PiCamera() as camera:
+      camera.resolution = (1028, 712)
+      camera.framerate = 30
+      _, width, height, channels = engine.get_input_tensor_shape()
+      camera.start_preview()
+      try:
+          stream = io.BytesIO()
+          for foo in camera.capture_continuous(stream,
+                                               format='rgb',
+                                               use_video_port=True,
+                                               resize=(width, height)):
+              stream.truncate()
+              stream.seek(0)
+              input = np.frombuffer(stream.getvalue(), dtype=np.uint8)
+              # cv2.imwrite('current_frame.jpg', input)
+              # img = Image.open('current_frame.jpg')
+              # draw = ImageDraw.Draw(img)
+              start_ms = time.time()
+              ans = engine.DetectWithInputTensor(input, threshold=0.5, top_k=10)
+              elapsed_ms = time.time() - start_ms
+              # Display result.
+              print ('-----------------------------------------')
+              if ans:
+                
+                for obj in ans:
+                  
+                  if labels:
+                    print(labels[obj.label_id])
+                  print ('score = ', obj.score)
+                  box = obj.bounding_box.flatten().tolist()
+                  print ('box = ', box)
+                  # Draw a rectangle.
+                #   draw.rectangle(box, outline='red')
+                # img.save(output_name)
+                # if platform.machine() == 'x86_64':
+                #   # For gLinux, simply show the image.
+                #   img.show()
+                # elif platform.machine() == 'armv7l':
+                #   # For Raspberry Pi, you need to install 'feh' to display image.
+                #   subprocess.Popen(['feh', output_name])
+                # else:
+                #   print ('Please check ', output_name)
+              else:
+                print ('No object detected!')
+      finally:
+          camera.stop_preview()
 
 if __name__ == '__main__':
   main()

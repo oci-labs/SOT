@@ -22,7 +22,19 @@ import time
 import Adafruit_DHT
 import RPi.GPIO as GPIO
 import random
-from 
+#from 
+
+import execnet
+
+def call_python_version(Version, Module, Function, ArgumentList):
+    gw      = execnet.makegateway("popen//python=python%s" % Version)
+    channel = gw.remote_exec("""
+        from %s import %s as the_function
+        channel.send(the_function(*channel.receive()))
+        """ % (Module, Function))
+    channel.send(ArgumentList)
+    return channel.receive()
+
 
 DHT_SENSOR_PIN = 4
 
@@ -56,7 +68,7 @@ def SendCommand(sock, message, log=True):
   return response
 
 
-print 'Bring up device 1'
+print('Bring up device 1')
 
 
 def MakeMessage(device_id, action, data=''):
@@ -72,7 +84,7 @@ def RunAction(action):
     return
   print('Send data: {} '.format(message))
   event_response = SendCommand(client_sock, message)
-  print "Response " + event_response
+  print("Response " + event_response)
 
 
 try:
@@ -85,15 +97,23 @@ try:
     h = random.randint(100,200)
     t=random.randint(0,50)
     t = t * 9.0/5 + 32
+    
+    result = call_python_version("3.5", "edgetpu.demo.classify_capture", "main",
+                                 ['./edgetpu/test_data/inception_v2_224_quant_edgetpu.tflite', './edgetpu/test_data/imagenet_labels.txt'])
+                                 
+                         
+    print(result["val"])
+    print(result["label"])
 
-    h = "{:.3f}".format(h)
-    t = "{:.3f}".format(t)
+
+    value = "{:.3f}".format(result["val"])
+#    t = "{:.3f}".format(t)
     sys.stdout.write('\r >>' + bcolors.CGREEN+ bcolors.BOLD +
-                       'Temp: {}, Hum: {}'.format(t,h)  + bcolors.ENDC + ' <<')
+                       'Object: {}, Val: {}'.format(result["label"],value)  + bcolors.ENDC + ' <<')
     sys.stdout.flush()
 
     message = MakeMessage(device_id, 'event',
-                'temperature={}, humidity={}'.format(t, h))
+                'objectname={}, predictionvalue={}'.format(result["label"], value))
 
     SendCommand(client_sock, message, False)
     time.sleep(2)
@@ -102,3 +122,5 @@ try:
 finally:
     print >>sys.stderr, 'closing socket'
     client_sock.close()
+
+
