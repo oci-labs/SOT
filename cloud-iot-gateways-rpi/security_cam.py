@@ -107,7 +107,7 @@ try:
         print(result["nPersons"])
         # print(result["scores"])
 
-        nPersons = "{:.3f}".format(result["nPersons"])
+        nPersons = result["nPersons"]
         #    t = "{:.3f}".format(t)
         # sys.stdout.write('\r >>' + bcolors.CGREEN + bcolors.BOLD +
         #   'nPersons: {}'.format(nPersons) + bcolors.ENDC + ' <<')
@@ -115,13 +115,14 @@ try:
         #   # 
         # sys.stdout.flush()
 
-        info = {'nPersons': '{}'.format(nPersons)}
+        info = {'nPersons': '{}'.format(nPersons), 'bounding_box': '{}'.format(result["bounding_box"]),
+        'scores': '{}'.format(result["scores"])}
         # info = json.dumps(info)
 
         message = MakeMessage(device_id=device_id, action='event', data=info)
 
         SendCommand(client_sock, message, False)
-        time.sleep(2)
+        time.sleep(20)
 
 
 finally:

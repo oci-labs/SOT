@@ -111,15 +111,15 @@ def main(model='./test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tfli
                 #   print ('Please check ', output_name)
                   bbox.append(box)
                   scores.append(score)
-                # msg = {"nPersons":float(len(ans)), "bounding_box":str(bbox), "scores": str(scores)}
+                msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
                 print("nPerson = " + str(nPerson))
-                msg = {"nPersons":int(nPerson)}
+                # msg = {"nPersons":int(nPerson)}
                 # print(msg)
                 return msg
               else:
                 print ('No object detected!')
-                # msg = {"nPersons":float(0), "bounding_box":str(bbox), "scores": str(scores)}
-                msg = {"nPersons":int(nPerson)}
+                msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
+                # msg = {"nPersons":int(nPerson)}
                 # print(msg)
                 return msg
       finally:
