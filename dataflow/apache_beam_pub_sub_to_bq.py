@@ -17,9 +17,13 @@ from apache_beam.options.pipeline_options import GoogleCloudOptions
 def run(argv=None):
     """Build and run the pipeline."""
     parser = argparse.ArgumentParser()
-    parser.add_argument('--input_topic', default='projects/securityofthings/topics/gateway-telemetry')
+    parser.add_argument('--input_topic',
+                        default='projects/securityofthings/topics/gateway-telemetry')
+    parser.add_argument('--input_subscription',
+                        default='new-subscription')
+    parser.add_argument('--output_path',
+                        default='gs://pub_sub_temp/temp/')
     known_args, pipeline_args = parser.parse_known_args(argv)
-
 
     # parser = argparse.ArgumentParser()
     # parser.add_argument(
@@ -42,31 +46,51 @@ def run(argv=None):
     options = PipelineOptions(flags=argv)
     google_cloud_options = options.view_as(GoogleCloudOptions)
     google_cloud_options.project = 'securityofthings'
-    google_cloud_options.job_name = 'mk_dataflow'
-    google_cloud_options.staging_location = 'gs://pub_sub_temp'
+    google_cloud_options.job_name = 'mk-dataflow-51'
+    google_cloud_options.staging_location = 'gs://pub_sub_staging/'
     google_cloud_options.temp_location = 'gs://pub_sub_temp/temp'
-    # options.view_as(StandardOptions).runner = 'DataflowRunner'
-    # options.view_as(StandardOptions).streaming = True
+    options.view_as(StandardOptions).runner = 'DataflowRunner'
+    options.view_as(StandardOptions).streaming = True
     # options.view_as(SetupOptions).save_main_session = True
-    p = beam.Pipeline(options=options)
+    p = beam.Pipeline(argv=pipeline_args, options=options)
 
-
-
+    def print_row(row):
+        # print row
+        return row
 
     # Read from PubSub into a PCollection.
     # if known_args.input_subscription:
     #     messages = (p
     #                 | beam.io.ReadFromPubSub(subscription=known_args.input_subscription)
     #                 .with_output_types(bytes))
+    output = (p | 'read' >> beam.io.ReadFromPubSub(topic=known_args.input_topic).with_output_types(bytes))
+
+    outpu_2 = (output | 'decode' >> beam.Map(lambda x: x.decode('utf-8')))
+
+    outpu_2 | 'print' >> beam.Map(lambda x: x)
+              # .with_output_types(bytes)
+              # | 'window' >> beam.WindowInto(window.FixedWindows(15, 0))
+              # | 'decode' >> beam.Map(lambda x: x.decode('utf-8'))
+
     # else:
-    with beam.Pipeline(argv=pipeline_args) as p:
-        telemetry = (p
-                     | beam.io.ReadFromPubSub(topic=known_args.input_topic)
-                     .with_output_types(bytes))
+    # with beam.Pipeline(argv=pipeline_args, options=options) as p:
+    # | 'add_window' >> beam.WindowInto(window.FixedWindows(10, 5)))
 
-        bq_input = telemetry | 'decode' >> beam.Map(lambda x: x.decode('utf-8'))
+    p.run().wait_until_finish()
+    # result = p.run()
+    # result.wait_until_finish()
 
-        print(bq_input)
+    #    --experiments=allow_non_updatable_job \
+    # print(r)
+    # | "print" >> beam.Map(print_row))
+    # .with_output_types(bytes))
+
+    # bq_input = telemetry | 'decode' >> beam.Map(lambda x: x.decode('utf-8'))
+
+    # telemetry | "print" >> beam.Map(print_row)
+
+    # bq_input | 'WriteToText' >> beam.io.WriteToText(known_args.output_path,
+    #                                                 file_name_suffix='sdasgdasg')
 
     # Count the occurrences of each word.
     # def count_ones(word_ones):
@@ -94,9 +118,9 @@ def run(argv=None):
     # # Write to PubSub.
     # # pylint: disable=expression-not-assigned
     # output | beam.io.WriteToPubSub(known_args.output_topic)
-
-    result = p.run()
-    result.wait_until_finish()
+    #
+    # result = p.run()
+    # result.wait_until_finish()
 
 
 if __name__ == '__main__':
