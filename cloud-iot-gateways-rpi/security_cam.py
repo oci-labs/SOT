@@ -113,11 +113,10 @@ try:
                        'Object: {}, Val: {}'.format(result["label"],value)  + bcolors.ENDC + ' <<')
     sys.stdout.flush()
 
-    message = {'device': device_id}
-    message = json.dumps(message)
+    info = {'device': device_id}
+    info = json.dumps(info)
 
-    # message = MakeMessage(device_id, 'event',
-    #             'objectname={}, predictionvalue={}'.format(result["label"], value))
+    message = MakeMessage(device_id, 'event', info)
 
     SendCommand(client_sock, message, False)
     time.sleep(2)
