@@ -42,14 +42,14 @@ def ReadLabelFile(file_path):
   return ret
 
 
-def main():
+def main(model='./test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite'):
   parser = argparse.ArgumentParser()
   parser.add_argument(
-      '--model', help='Path of the detection model.', required=True)
+      '--model', help='Path of the detection model.', default = model)
   parser.add_argument(
       '--label', help='Path of the labels file.')
   parser.add_argument(
-      '--input', help='File path of the input image.', required=True)
+      '--input', help='File path of the input image.', required=False)
   parser.add_argument(
       '--output', help='File path of the output image.')
   args = parser.parse_args()
@@ -85,10 +85,13 @@ def main():
               elapsed_ms = time.time() - start_ms
               # Display result.
               print ('-----------------------------------------')
+              nPerson = 0
+              bbox = list()
+              scores = list()
               if ans:
                 
                 for obj in ans:
-                  
+                  nPerson = nPerson+ 1
                   if labels:
                     print(labels[obj.label_id])
                   print ('score = ', obj.score)
@@ -105,8 +108,14 @@ def main():
                 #   subprocess.Popen(['feh', output_name])
                 # else:
                 #   print ('Please check ', output_name)
+                bbox.append(box)
+                scores.append(scores)
+                msg = {"nPersons":len(ans), "bounding_box":bbox}
+                return msg
               else:
                 print ('No object detected!')
+                msg = {"nPersons":0, "bounding_box":bbox}
+                return msg
       finally:
           camera.stop_preview()
 
