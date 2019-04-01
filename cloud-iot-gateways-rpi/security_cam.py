@@ -23,12 +23,13 @@ import Adafruit_DHT
 import RPi.GPIO as GPIO
 import random
 import json
-#from 
+# from
 
 import execnet
 
+
 def call_python_version(Version, Module, Function, ArgumentList):
-    gw      = execnet.makegateway("popen//python=python%s" % Version)
+    gw = execnet.makegateway("popen//python=python%s" % Version)
     channel = gw.remote_exec("""
         from %s import %s as the_function
         channel.send(the_function(*channel.receive()))
@@ -47,83 +48,81 @@ client_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_address = (ADDR, PORT)
 
 device_id = sys.argv[1]
-print("device_id",device_id)
+print("device_id", device_id)
 if not device_id:
-  sys.exit('The device id must be specified.')
+    sys.exit('The device id must be specified.')
 
 print('Bringing up device {}'.format(device_id))
 
+
 # return message received
 def SendCommand(sock, message, log=True):
-  if log:
-    print >>sys.stderr, 'sending: "%s"' % message
-  sock.sendto(message, server_address)
+    if log:
+        print >> sys.stderr, 'sending: "%s"' % message
+    sock.sendto(message, server_address)
 
-  # Receive response
-  if log:
-    print >>sys.stderr, 'waiting for response'
-  response, _ = sock.recvfrom(4096)
-  if log:
-    print >>sys.stderr, 'received: "%s"' % response
+    # Receive response
+    if log:
+        print >> sys.stderr, 'waiting for response'
+    response, _ = sock.recvfrom(4096)
+    if log:
+        print >> sys.stderr, 'received: "%s"' % response
 
-  return response
+    return response
 
 
 print('Bring up device 1')
 
 
-def MakeMessage(device_id, action, data=''):
-  if data:
-    return '{{ "device" : "{}", "action":"{}", "data" : "{}" }}'.format(device_id, action, data)
-  else:
-    return '{{ "device" : "{}", "action":"{}" }}'.format(device_id, action)
+def MakeMessage(device_id, action, data=None):
+    if data:
+        return '{{ "device" : "{}", "action":"{}", "data" : {} }}'.format(device_id, action, json.dumps(data))
+    else:
+        return '{{ "device" : "{}", "action":"{}" }}'.format(device_id, action)
 
 
 def RunAction(action):
-  message = MakeMessage(device_id, action)
-  if not message:
-    return
-  print('Send data: {} '.format(message))
-  event_response = SendCommand(client_sock, message)
-  print("Response " + event_response)
+    message = MakeMessage(device_id, action)
+    if not message:
+        return
+    print('Send data: {} '.format(message))
+    event_response = SendCommand(client_sock, message)
+    print("Response " + event_response)
 
 
 try:
-  random.seed()
-  RunAction('detach')
-  RunAction('attach')
+    random.seed()
+    RunAction('detach')
+    RunAction('attach')
 
-  while True:
-    #h, t = Adafruit_DHT.read_retry(22, DHT_SENSOR_PIN)
-    h = random.randint(100,200)
-    t=random.randint(0,50)
-    t = t * 9.0/5 + 32
-    
-    result = call_python_version("3.5", "edgetpu.demo.classify_capture", "main",
-                                 ['./edgetpu/test_data/inception_v2_224_quant_edgetpu.tflite', './edgetpu/test_data/imagenet_labels.txt'])
-                                 
-                         
-    print(result["val"])
-    print(result["label"])
+    while True:
+        # h, t = Adafruit_DHT.read_retry(22, DHT_SENSOR_PIN)
+        h = random.randint(100, 200)
+        t = random.randint(0, 50)
+        t = t * 9.0 / 5 + 32
 
+        result = call_python_version("3.5", "edgetpu.demo.classify_capture", "main",
+                                     ['./edgetpu/test_data/inception_v2_224_quant_edgetpu.tflite',
+                                      './edgetpu/test_data/imagenet_labels.txt'])
 
-    value = "{:.3f}".format(result["val"])
-#    t = "{:.3f}".format(t)
-    sys.stdout.write('\r >>' + bcolors.CGREEN+ bcolors.BOLD +
-                       'Object: {}, Val: {}'.format(result["label"],value)  + bcolors.ENDC + ' <<')
-    sys.stdout.flush()
+        print(result["val"])
+        print(result["label"])
 
-    info = {'device': device_id}
-    info = json.dumps(info)
+        value = "{:.3f}".format(result["val"])
+        #    t = "{:.3f}".format(t)
+        sys.stdout.write('\r >>' + bcolors.CGREEN + bcolors.BOLD +
+                         'Object: {}, Val: {}'.format(result["label"], value) + bcolors.ENDC + ' <<')
+        sys.stdout.flush()
 
-    message = MakeMessage(device_id, 'event', info)
+        info = {'device': device_id}
+        # info = json.dumps(info)
 
-    SendCommand(client_sock, message, False)
-    time.sleep(2)
+        message = MakeMessage(device_id=device_id, action='event', data=info)
+
+        SendCommand(client_sock, message, False)
+        time.sleep(2)
 
 
 finally:
-    print >>sys.stderr, 'closing socket'
+    print >> sys.stderr, 'closing socket'
     client_sock.close()
-
-
