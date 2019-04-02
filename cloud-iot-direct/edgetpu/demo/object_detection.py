@@ -59,69 +59,69 @@ def main(model='./test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tfli
   else:
     output_name = args.output
 
-  # Initialize engine.
-  engine = DetectionEngine(args.model)
-  labels = ReadLabelFile(args.label) if args.label else None
+# Initialize engine.
+engine = DetectionEngine(args.model)
+labels = ReadLabelFile(args.label) if args.label else None
 
-  with picamera.PiCamera() as camera:
-      camera.resolution = (1028, 712)
-      camera.framerate = 30
-      _, width, height, channels = engine.get_input_tensor_shape()
-      camera.start_preview()
-      try:
-          stream = io.BytesIO()
-          for foo in camera.capture_continuous(stream,
-                                               format='rgb',
-                                               use_video_port=True,
-                                               resize=(width, height)):
-              stream.truncate()
-              stream.seek(0)
-              input = np.frombuffer(stream.getvalue(), dtype=np.uint8)
-              # cv2.imwrite('current_frame.jpg', input)
-              # img = Image.open('current_frame.jpg')
-              # draw = ImageDraw.Draw(img)
-              start_ms = time.time()
-              ans = engine.DetectWithInputTensor(input, threshold=0.5, top_k=10)
-              elapsed_ms = time.time() - start_ms
-              # Display result.
-              print ('-----------------------------------------')
-              nPerson = 0
-              bbox = list()
-              scores = list()
-              if ans:
-                print(ans)
-                for obj in ans:
-                  nPerson = nPerson+ 1
-                  if labels:
-                    print(labels[obj.label_id])
-                  score = obj.score
-                  print ('score = ', obj.score)
-                  box = obj.bounding_box.flatten().tolist()
-                  print ('box = ', box)
-                  # Draw a rectangle.
-                #   draw.rectangle(box, outline='red')
-                # img.save(output_name)
-                # if platform.machine() == 'x86_64':
-                #   # For gLinux, simply show the image.
-                #   img.show()
-                # elif platform.machine() == 'armv7l':
-                #   # For Raspberry Pi, you need to install 'feh' to display image.
-                #   subprocess.Popen(['feh', output_name])
-                # else:
-                #   print ('Please check ', output_name)
-                  bbox.append(box)
-                  scores.append(score)
-                # msg = {"nPersons":float(len(ans)), "bounding_box":str(bbox), "scores": str(scores)}
-                print("nPerson = " + str(nPerson))
-                msg = {"nPersons":int(nPerson)}
-                # print(msg)
-                return msg
-              else:
-                print ('No object detected!')
-                # msg = {"nPersons":float(0), "bounding_box":str(bbox), "scores": str(scores)}
-                msg = {"nPersons":int(nPerson)}
-                # print(msg)
-                return msg
+with picamera.PiCamera() as camera:
+    camera.resolution = (1028, 712)
+    camera.framerate = 30
+    _, width, height, channels = engine.get_input_tensor_shape()
+    camera.start_preview()
+    try:
+        stream = io.BytesIO()
+        for foo in camera.capture_continuous(stream,
+                                             format='rgb',
+                                             use_video_port=True,
+                                             resize=(width, height)):
+            stream.truncate()
+            stream.seek(0)
+            input = np.frombuffer(stream.getvalue(), dtype=np.uint8)
+            # cv2.imwrite('current_frame.jpg', input)
+            # img = Image.open('current_frame.jpg')
+            # draw = ImageDraw.Draw(img)
+            start_ms = time.time()
+            ans = engine.DetectWithInputTensor(input, threshold=0.5, top_k=10)
+            elapsed_ms = time.time() - start_ms
+            # Display result.
+            print ('-----------------------------------------')
+            nPerson = 0
+            bbox = list()
+            scores = list()
+            if ans:
+              print(ans)
+              for obj in ans:
+                nPerson = nPerson+ 1
+                if labels:
+                  print(labels[obj.label_id])
+                score = obj.score
+                print ('score = ', obj.score)
+                box = obj.bounding_box.flatten().tolist()
+                print ('box = ', box)
+                # Draw a rectangle.
+              #   draw.rectangle(box, outline='red')
+              # img.save(output_name)
+              # if platform.machine() == 'x86_64':
+              #   # For gLinux, simply show the image.
+              #   img.show()
+              # elif platform.machine() == 'armv7l':
+              #   # For Raspberry Pi, you need to install 'feh' to display image.
+              #   subprocess.Popen(['feh', output_name])
+              # else:
+              #   print ('Please check ', output_name)
+                bbox.append(box)
+                scores.append(score)
+              # msg = {"nPersons":float(len(ans)), "bounding_box":str(bbox), "scores": str(scores)}
+              print("nPerson = " + str(nPerson))
+              msg = {"nPersons":int(nPerson)}
+              # print(msg)
+              return msg
+            else:
+              print ('No object detected!')
+              # msg = {"nPersons":float(0), "bounding_box":str(bbox), "scores": str(scores)}
+              msg = {"nPersons":int(nPerson)}
+              # print(msg)
+              return msg
       finally:
           camera.stop_preview()
 

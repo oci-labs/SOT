@@ -295,7 +295,7 @@ def send_data_from_bound_device(
     client.publish(gateway_topic, gateway_state, qos=1)
 
     # Publish num_messages mesages to the MQTT bridge
-    for i in range(1, num_messages + 1):
+    # for i in range(1, num_messages + 1):
         
 
 
@@ -334,7 +334,7 @@ def send_data_from_bound_device(
                     time.sleep(delay)
                     minimum_backoff_time *= 2
                     client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
-            
+
                 stream.truncate()
                 stream.seek(0)
                 input = np.frombuffer(stream.getvalue(), dtype=np.uint8)
@@ -398,9 +398,9 @@ def send_data_from_bound_device(
 
                 time.sleep(5)
 
-    detach_device(client, device_id)
+            detach_device(client, device_id)
 
-    print('Finished.')
+            print('Finished.')
     # [END send_data_from_bound_device]
 
 
