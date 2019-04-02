@@ -1,0 +1,3 @@
+[console_scripts]
+gcp-devrel-py-tools = gcp_devrel.tools:main
+
