@@ -29,6 +29,8 @@ import os
 import random
 import ssl
 import time
+import json
+import datetime
 
 import jwt
 import paho.mqtt.client as mqtt
@@ -398,6 +400,9 @@ def send_data_from_bound_device(
             detach_device(client, device_id)
 
             print('Finished.')
+
+        finally:
+          camera.stop_preview()
     # [END send_data_from_bound_device]
 
 
@@ -506,49 +511,108 @@ def mqtt_device_demo(args):
         args.device_id, args.private_key_file, args.algorithm,
         args.ca_certs, args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
-    # Publish num_messages mesages to the MQTT bridge once per second.
-    for i in range(1, args.num_messages + 1):
-        # Process network events.
-        client.loop()
 
-        # Wait if backoff is required.
-        if should_backoff:
-            # If backoff time is too large, give up.
-            if minimum_backoff_time > MAXIMUM_BACKOFF_TIME:
-                print('Exceeded maximum backoff time. Giving up.')
-                break
 
-            # Otherwise, wait and connect again.
-            delay = minimum_backoff_time + random.randint(0, 1000) / 1000.0
-            print('Waiting for {} before reconnecting.'.format(delay))
-            time.sleep(delay)
-            minimum_backoff_time *= 2
-            client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
-        payload = '{}/{}-payload-{}'.format(
-            args.registry_id, args.device_id, i)
-        print('Publishing message {}/{}: \'{}\''.format(
-            i, args.num_messages, payload))
-        # [START iot_mqtt_jwt_refresh]
-        seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
-        if seconds_since_issue > 60 * jwt_exp_mins:
-            print('Refreshing token after {}s').format(seconds_since_issue)
-            jwt_iat = datetime.datetime.utcnow()
-            client = get_client(
-                args.project_id, args.cloud_region,
-                args.registry_id, args.device_id, args.private_key_file,
-                args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
-                args.mqtt_bridge_port)
+
+    # parser_tpu = argparse.ArgumentParser()
+    # model = './edgetpu/test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite'
+    # parser_tpu.add_argument('--model', help='Path of the detection model.', default=model)
+    # # parser.add_argument('--label', help='Path of the labels file.')
+    # # parser.add_argument('--input', help='File path of the input image.', required=False)
+    # # parser.add_argument('--output', help='File path of the output image.')
+    # args_tpu = parser_tpu.parse_args()
+
+    # Initialize engine.
+    engine = DetectionEngine('./edgetpu/test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite')
+    # labels = ReadLabelFile(args_tpu.label) if args_tpu.label else None
+
+    with picamera.PiCamera() as camera:
+        camera.resolution = (1024, 768)
+        camera.framerate = 30
+        _, width, height, channels = engine.get_input_tensor_shape()
+        camera.start_preview()
+        try:
+            stream = io.BytesIO()
+            for foo in camera.capture_continuous(stream,
+                                                 format='rgb',
+                                                 use_video_port=True,
+                                                 resize=(width, height)):
+                client.loop()
+
+                if should_backoff:
+                    # If backoff time is too large, give up.
+                    if minimum_backoff_time > MAXIMUM_BACKOFF_TIME:
+                        print('Exceeded maximum backoff time. Giving up.')
+                        break
+
+                    delay = minimum_backoff_time + random.randint(0, 1000) / 1000.0
+                    time.sleep(delay)
+                    minimum_backoff_time *= 2
+                    client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
+
+                stream.truncate()
+                stream.seek(0)
+                input = np.frombuffer(stream.getvalue(), dtype=np.uint8)
+
+                start_ms = time.time()
+                ans = engine.DetectWithInputTensor(input, threshold=0.5, top_k=10)
+                elapsed_ms = time.time() - start_ms
+                # Display result.
+                print ('-----------------------------------------')
+                nPerson = 0
+                bbox = list()
+                scores = list()
+                if ans:
+                    for obj in ans:
+                        nPerson = nPerson + 1
+                        # if labels:
+                        #     print(labels[obj.label_id])
+                        score = [obj.score]
+                        # print ('score = ', obj.score)
+                        box = obj.bounding_box.flatten().tolist()
+                        # print ('box = ', box)
+                        bbox.append(box)
+                        scores.append(score)
+                    msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
+                else:
+                    msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
+                
+                bounding_box = [{'box_0': bb[0],
+                         'box_1': bb[1],
+                         'box_2': bb[2],
+                         'box_3': bb[3]} for bb in eval(msg["bounding_box"])]
+
+                scores_msg = [{'score': s[0]} for s in eval(msg["scores"])]
+
+                info = {'nPersons': '{}'.format(nPerson), 'bounding_box': bounding_box,
+                        'scores': scores_msg}
+
+                info = json.dumps(info)
+
+                payload = info
+                print('Publishing message {}/{}: \'{}\''.format(nPerson, args.num_messages, payload))
+                # [START iot_mqtt_jwt_refresh]
+                seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
+                if seconds_since_issue > 60 * jwt_exp_mins:
+                    print('Refreshing token after {}s').format(seconds_since_issue)
+                    jwt_iat = datetime.datetime.utcnow()
+                    client = get_client(
+                        args.project_id, args.cloud_region,
+                        args.registry_id, args.device_id, args.private_key_file,
+                        args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
+                        args.mqtt_bridge_port)
         # [END iot_mqtt_jwt_refresh]
         # Publish "payload" to the MQTT topic. qos=1 means at least once
         # delivery. Cloud IoT Core also supports qos=0 for at most once
         # delivery.
-        client.publish(mqtt_topic, payload, qos=1)
+                client.publish(mqtt_topic, payload, qos=1)
 
         # Send events every second. State should not be updated as often
-        time.sleep(1 if args.message_type == 'event' else 5)
-    # [END iot_mqtt_run]
-
+                time.sleep(1 if args.message_type == 'event' else 5)
+    
+        finally:
+          camera.stop_preview()
 
 def main():
     args = parse_command_line_args()
