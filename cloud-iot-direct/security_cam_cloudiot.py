@@ -42,6 +42,7 @@ import picamera
 import io
 import time
 import numpy as np
+
 # [END iot_mqtt_includes]
 
 logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.CRITICAL)
@@ -73,12 +74,12 @@ def create_jwt(project_id, private_key_file, algorithm):
         """
 
     token = {
-            # The time that the token was issued at
-            'iat': datetime.datetime.utcnow(),
-            # The time the token expires.
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
-            # The audience field should always be set to the GCP project id.
-            'aud': project_id
+        # The time that the token was issued at
+        'iat': datetime.datetime.utcnow(),
+        # The time the token expires.
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+        # The audience field should always be set to the GCP project id.
+        'aud': project_id
     }
 
     # Read the private key file.
@@ -86,9 +87,11 @@ def create_jwt(project_id, private_key_file, algorithm):
         private_key = f.read()
 
     print('Creating JWT using {} from private key file {}'.format(
-            algorithm, private_key_file))
+        algorithm, private_key_file))
 
     return jwt.encode(token, private_key, algorithm=algorithm)
+
+
 # [END iot_mqtt_jwt]
 
 
@@ -128,7 +131,7 @@ def on_message(unused_client, unused_userdata, message):
     """Callback when the device receives a message on a subscription."""
     payload = str(message.payload)
     print('Received message \'{}\' on topic \'{}\' with Qos {}'.format(
-            payload, message.topic, str(message.qos)))
+        payload, message.topic, str(message.qos)))
 
 
 def get_client(
@@ -137,7 +140,7 @@ def get_client(
     """Create our MQTT client. The client_id is a unique string that identifies
     this device. For Google Cloud IoT Core, it must be in the format below."""
     client_id = 'projects/{}/locations/{}/registries/{}/devices/{}'.format(
-            project_id, cloud_region, registry_id, device_id)
+        project_id, cloud_region, registry_id, device_id)
     print('Device client_id is \'{}\''.format(client_id))
 
     client = mqtt.Client(client_id=client_id)
@@ -145,9 +148,9 @@ def get_client(
     # With Google Cloud IoT Core, the username field is ignored, and the
     # password field is used to transmit a JWT to authorize the device.
     client.username_pw_set(
-            username='unused',
-            password=create_jwt(
-                    project_id, private_key_file, algorithm))
+        username='unused',
+        password=create_jwt(
+            project_id, private_key_file, algorithm))
 
     # Enable SSL/TLS support.
     client.tls_set(ca_certs=ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
@@ -177,6 +180,8 @@ def get_client(
     client.subscribe(mqtt_command_topic, qos=0)
 
     return client
+
+
 # [END iot_mqtt_config]
 
 
@@ -296,12 +301,10 @@ def send_data_from_bound_device(
 
     # Publish num_messages mesages to the MQTT bridge
     # for i in range(1, num_messages + 1):
-        
-
 
     parser = argparse.ArgumentParser()
     model = './edgetpu/test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite'
-    parser.add_argument('--model', help='Path of the detection model.', default = model)
+    parser.add_argument('--model', help='Path of the detection model.', default=model)
     parser.add_argument('--label', help='Path of the labels file.')
     parser.add_argument('--input', help='File path of the input image.', required=False)
     parser.add_argument('--output', help='File path of the output image.')
@@ -350,42 +353,36 @@ def send_data_from_bound_device(
                 bbox = list()
                 scores = list()
                 if ans:
-                  print(ans)
-                  for obj in ans:
-                    nPerson = nPerson+ 1
-                    if labels:
-                      print(labels[obj.label_id])
-                    score = obj.score
-                    print ('score = ', obj.score)
-                    box = obj.bounding_box.flatten().tolist()
-                    print ('box = ', box)
-                    bbox.append(box)
-                    scores.append(score)
-                  # msg = {"nPersons":float(len(ans)), "bounding_box":str(bbox), "scores": str(scores)}
-                  print("nPerson = " + str(nPerson))
-                  msg = {"nPersons":int(nPerson)}
-                  # print(msg)
-                  # return msg
+                    print(ans)
+                    for obj in ans:
+                        nPerson = nPerson + 1
+                        if labels:
+                            print(labels[obj.label_id])
+                        score = obj.score
+                        print ('score = ', obj.score)
+                        box = obj.bounding_box.flatten().tolist()
+                        print ('box = ', box)
+                        bbox.append(box)
+                        scores.append(score)
+                    # msg = {"nPersons":float(len(ans)), "bounding_box":str(bbox), "scores": str(scores)}
+                    print("nPerson = " + str(nPerson))
+                    msg = {"nPersons": int(nPerson)}
+                    # print(msg)
+                    # return msg
                 else:
-                  print ('No object detected!')
-                  # msg = {"nPersons":float(0), "bounding_box":str(bbox), "scores": str(scores)}
-                  msg = {"nPersons":int(nPerson)}
-                  # print(msg)
-                  # return msg
-
-
-
-
-
-
+                    print ('No object detected!')
+                    # msg = {"nPersons":float(0), "bounding_box":str(bbox), "scores": str(scores)}
+                    msg = {"nPersons": int(nPerson)}
+                    # print(msg)
+                    # return msg
 
                 payload = '{}/{}-{}-payload-{}'.format(
-                        nPerson, nPerson, nPerson, i)
+                    nPerson, nPerson, nPerson, i)
 
                 print('Publishing message {}/{}: \'{}\' to {}'.format(
-                        i, num_messages, payload, device_topic))
+                    i, num_messages, payload, device_topic))
                 client.publish(
-                        device_topic, '{} : {}'.format(device_id, payload), qos=1)
+                    device_topic, '{} : {}'.format(device_id, payload), qos=1)
 
                 seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
                 if seconds_since_issue > 60 * jwt_exp_mins:
@@ -407,71 +404,71 @@ def send_data_from_bound_device(
 def parse_command_line_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description=(
-            'Example Google Cloud IoT Core MQTT device connection code.'))
+        'Example Google Cloud IoT Core MQTT device connection code.'))
     parser.add_argument(
-            '--algorithm',
-            choices=('RS256', 'ES256'),
-            required=True,
-            help='Which encryption algorithm to use to generate the JWT.')
+        '--algorithm',
+        choices=('RS256', 'ES256'),
+        required=True,
+        help='Which encryption algorithm to use to generate the JWT.')
     parser.add_argument(
-            '--ca_certs',
-            default='roots.pem',
-            help=('CA root from https://pki.google.com/roots.pem'))
+        '--ca_certs',
+        default='roots.pem',
+        help=('CA root from https://pki.google.com/roots.pem'))
     parser.add_argument(
-            '--cloud_region', default='us-central1', help='GCP cloud region')
+        '--cloud_region', default='us-central1', help='GCP cloud region')
     parser.add_argument(
-            '--data',
-            default='Hello there',
-            help='The telemetry data sent on behalf of a device')
+        '--data',
+        default='Hello there',
+        help='The telemetry data sent on behalf of a device')
     parser.add_argument(
-            '--device_id', required=True, help='Cloud IoT Core device id')
+        '--device_id', required=True, help='Cloud IoT Core device id')
     parser.add_argument(
-            '--gateway_id', required=False, help='Gateway identifier.')
+        '--gateway_id', required=False, help='Gateway identifier.')
     parser.add_argument(
-            '--jwt_expires_minutes',
-            default=20,
-            type=int,
-            help=('Expiration time, in minutes, for JWT tokens.'))
+        '--jwt_expires_minutes',
+        default=20,
+        type=int,
+        help=('Expiration time, in minutes, for JWT tokens.'))
     parser.add_argument(
-            '--listen_dur',
-            default=60,
-            type=int,
-            help='Duration (seconds) to listen for configuration messages')
+        '--listen_dur',
+        default=60,
+        type=int,
+        help='Duration (seconds) to listen for configuration messages')
     parser.add_argument(
-            '--message_type',
-            choices=('event', 'state'),
-            default='event',
-            help=('Indicates whether the message to be published is a '
-                  'telemetry event or a device state message.'))
+        '--message_type',
+        choices=('event', 'state'),
+        default='event',
+        help=('Indicates whether the message to be published is a '
+              'telemetry event or a device state message.'))
     parser.add_argument(
-            '--mqtt_bridge_hostname',
-            default='mqtt.googleapis.com',
-            help='MQTT bridge hostname.')
+        '--mqtt_bridge_hostname',
+        default='mqtt.googleapis.com',
+        help='MQTT bridge hostname.')
     parser.add_argument(
-            '--mqtt_bridge_port',
-            choices=(8883, 443),
-            default=8883,
-            type=int,
-            help='MQTT bridge port.')
+        '--mqtt_bridge_port',
+        choices=(8883, 443),
+        default=8883,
+        type=int,
+        help='MQTT bridge port.')
     parser.add_argument(
-            '--num_messages',
-            type=int,
-            default=100,
-            help='Number of messages to publish.')
+        '--num_messages',
+        type=int,
+        default=100,
+        help='Number of messages to publish.')
     parser.add_argument(
-            '--private_key_file',
-            required=True,
-            help='Path to private key file.')
+        '--private_key_file',
+        required=True,
+        help='Path to private key file.')
     parser.add_argument(
-            '--project_id',
-            default=os.environ.get('GOOGLE_CLOUD_PROJECT'),
-            help='GCP cloud project name')
+        '--project_id',
+        default=os.environ.get('GOOGLE_CLOUD_PROJECT'),
+        help='GCP cloud project name')
     parser.add_argument(
-            '--registry_id', required=True, help='Cloud IoT Core registry id')
+        '--registry_id', required=True, help='Cloud IoT Core registry id')
     parser.add_argument(
-            '--service_account_json',
-            default=os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"),
-            help='Path to service account json file.')
+        '--service_account_json',
+        default=os.environ.get("GOOGLE_APPLICATION_CREDENTIALS"),
+        help='Path to service account json file.')
 
     # Command subparser
     command = parser.add_subparsers(dest='command')
@@ -529,9 +526,9 @@ def mqtt_device_demo(args):
             client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
         payload = '{}/{}-payload-{}'.format(
-                args.registry_id, args.device_id, i)
+            args.registry_id, args.device_id, i)
         print('Publishing message {}/{}: \'{}\''.format(
-                i, args.num_messages, payload))
+            i, args.num_messages, payload))
         # [START iot_mqtt_jwt_refresh]
         seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
         if seconds_since_issue > 60 * jwt_exp_mins:
@@ -558,20 +555,20 @@ def main():
 
     if args.command == 'gateway_listen':
         listen_for_messages(
-                args.service_account_json, args.project_id,
-                args.cloud_region, args.registry_id, args.device_id,
-                args.gateway_id, args.num_messages, args.private_key_file,
-                args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
-                args.mqtt_bridge_port, args.jwt_expires_minutes,
-                args.listen_dur)
+            args.service_account_json, args.project_id,
+            args.cloud_region, args.registry_id, args.device_id,
+            args.gateway_id, args.num_messages, args.private_key_file,
+            args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
+            args.mqtt_bridge_port, args.jwt_expires_minutes,
+            args.listen_dur)
         return
     elif args.command == 'gateway_send':
         send_data_from_bound_device(
-                args.service_account_json, args.project_id,
-                args.cloud_region, args.registry_id, args.device_id,
-                args.gateway_id, args.num_messages, args.private_key_file,
-                args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
-                args.mqtt_bridge_port, args.jwt_expires_minutes, args.data)
+            args.service_account_json, args.project_id,
+            args.cloud_region, args.registry_id, args.device_id,
+            args.gateway_id, args.num_messages, args.private_key_file,
+            args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
+            args.mqtt_bridge_port, args.jwt_expires_minutes, args.data)
         return
     else:
         mqtt_device_demo(args)
