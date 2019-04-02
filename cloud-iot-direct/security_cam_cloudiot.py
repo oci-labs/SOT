@@ -32,6 +32,16 @@ import time
 
 import jwt
 import paho.mqtt.client as mqtt
+import argparse
+import platform
+import subprocess
+from edgetpu.detection.engine import DetectionEngine
+from PIL import Image
+from PIL import ImageDraw
+import picamera
+import io
+import time
+import numpy as np
 # [END iot_mqtt_includes]
 
 logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.CRITICAL)
@@ -298,6 +308,14 @@ def send_data_from_bound_device(
             time.sleep(delay)
             minimum_backoff_time *= 2
             client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
+
+
+        parser = argparse.ArgumentParser()
+        parser.add_argument('--model', help='Path of the detection model.', default = model)
+        parser.add_argument('--label', help='Path of the labels file.')
+        parser.add_argument('--input', help='File path of the input image.', required=False)
+        parser.add_argument('--output', help='File path of the output image.')
+        args = parser.parse_args()
 
         payload = '{}/{}-{}-payload-{}'.format(
                 registry_id, gateway_id, device_id, i)
