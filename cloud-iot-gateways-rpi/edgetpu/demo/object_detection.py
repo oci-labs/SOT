@@ -94,7 +94,7 @@ def main(model='./test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tfli
                   nPerson = nPerson+ 1
                   if labels:
                     print(labels[obj.label_id])
-                  score = obj.score
+                  score = [obj.score]
                   print ('score = ', obj.score)
                   box = obj.bounding_box.flatten().tolist()
                   print ('box = ', box)

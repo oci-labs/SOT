@@ -118,9 +118,9 @@ try:
         bounding_box = [{'box_0': bb[0],
                          'box_1': bb[1],
                          'box_2': bb[2],
-                         'box_3': bb[3]} for bb in result["bounding_box"]]
+                         'box_3': bb[3]} for bb in eval(result["bounding_box"])]
 
-        scores = [{'score': s[0]} for s in result["scores"]]
+        scores = [{'score': s[0]} for s in eval(result["scores"])]
 
         info = {'nPersons': '{}'.format(nPersons), 'bounding_box': bounding_box,
                 'scores': scores}
