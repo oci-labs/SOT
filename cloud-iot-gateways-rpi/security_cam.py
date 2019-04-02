@@ -76,7 +76,7 @@ print('Bring up device 1')
 
 def MakeMessage(device_id, action, data=None):
     if data:
-        return '{{ "device" : "{}", "action":"{}", "data" : {} }}'.format(device_id, action, json.dumps(data))
+        return '{{ "device" : "{}", "action":"{}", "data" : {} }}'.format(device_id, action, data)
     else:
         return '{{ "device" : "{}", "action":"{}" }}'.format(device_id, action)
 
@@ -129,6 +129,7 @@ try:
         # print(info)
 
         message = MakeMessage(device_id=device_id, action='event', data=info)
+        print(message)
 
         SendCommand(client_sock, message, False)
         time.sleep(20)

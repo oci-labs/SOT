@@ -296,45 +296,107 @@ def send_data_from_bound_device(
 
     # Publish num_messages mesages to the MQTT bridge
     for i in range(1, num_messages + 1):
-        client.loop()
-
-        if should_backoff:
-            # If backoff time is too large, give up.
-            if minimum_backoff_time > MAXIMUM_BACKOFF_TIME:
-                print('Exceeded maximum backoff time. Giving up.')
-                break
-
-            delay = minimum_backoff_time + random.randint(0, 1000) / 1000.0
-            time.sleep(delay)
-            minimum_backoff_time *= 2
-            client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
+        
 
 
-        parser = argparse.ArgumentParser()
-        parser.add_argument('--model', help='Path of the detection model.', default = model)
-        parser.add_argument('--label', help='Path of the labels file.')
-        parser.add_argument('--input', help='File path of the input image.', required=False)
-        parser.add_argument('--output', help='File path of the output image.')
-        args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+    model = './edgetpu/test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite'
+    parser.add_argument('--model', help='Path of the detection model.', default = model)
+    parser.add_argument('--label', help='Path of the labels file.')
+    parser.add_argument('--input', help='File path of the input image.', required=False)
+    parser.add_argument('--output', help='File path of the output image.')
+    args = parser.parse_args()
 
-        payload = '{}/{}-{}-payload-{}'.format(
-                registry_id, gateway_id, device_id, i)
+    # Initialize engine.
+    engine = DetectionEngine(args.model)
+    labels = ReadLabelFile(args.label) if args.label else None
 
-        print('Publishing message {}/{}: \'{}\' to {}'.format(
-                i, num_messages, payload, device_topic))
-        client.publish(
-                device_topic, '{} : {}'.format(device_id, payload), qos=1)
+    with picamera.PiCamera() as camera:
+        camera.resolution = (1028, 712)
+        camera.framerate = 30
+        _, width, height, channels = engine.get_input_tensor_shape()
+        camera.start_preview()
+        try:
+            stream = io.BytesIO()
+            for foo in camera.capture_continuous(stream,
+                                                 format='rgb',
+                                                 use_video_port=True,
+                                                 resize=(width, height)):
+                client.loop()
 
-        seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
-        if seconds_since_issue > 60 * jwt_exp_mins:
-            print('Refreshing token after {}s').format(seconds_since_issue)
-            jwt_iat = datetime.datetime.utcnow()
-            client = get_client(
-                project_id, cloud_region, registry_id, gateway_id,
-                private_key_file, algorithm, ca_certs, mqtt_bridge_hostname,
-                mqtt_bridge_port)
+                if should_backoff:
+                    # If backoff time is too large, give up.
+                    if minimum_backoff_time > MAXIMUM_BACKOFF_TIME:
+                        print('Exceeded maximum backoff time. Giving up.')
+                        break
 
-        time.sleep(5)
+                    delay = minimum_backoff_time + random.randint(0, 1000) / 1000.0
+                    time.sleep(delay)
+                    minimum_backoff_time *= 2
+                    client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
+            
+                stream.truncate()
+                stream.seek(0)
+                input = np.frombuffer(stream.getvalue(), dtype=np.uint8)
+                # cv2.imwrite('current_frame.jpg', input)
+                # img = Image.open('current_frame.jpg')
+                # draw = ImageDraw.Draw(img)
+                start_ms = time.time()
+                ans = engine.DetectWithInputTensor(input, threshold=0.5, top_k=10)
+                elapsed_ms = time.time() - start_ms
+                # Display result.
+                print ('-----------------------------------------')
+                nPerson = 0
+                bbox = list()
+                scores = list()
+                if ans:
+                  print(ans)
+                  for obj in ans:
+                    nPerson = nPerson+ 1
+                    if labels:
+                      print(labels[obj.label_id])
+                    score = obj.score
+                    print ('score = ', obj.score)
+                    box = obj.bounding_box.flatten().tolist()
+                    print ('box = ', box)
+                    bbox.append(box)
+                    scores.append(score)
+                  # msg = {"nPersons":float(len(ans)), "bounding_box":str(bbox), "scores": str(scores)}
+                  print("nPerson = " + str(nPerson))
+                  msg = {"nPersons":int(nPerson)}
+                  # print(msg)
+                  # return msg
+                else:
+                  print ('No object detected!')
+                  # msg = {"nPersons":float(0), "bounding_box":str(bbox), "scores": str(scores)}
+                  msg = {"nPersons":int(nPerson)}
+                  # print(msg)
+                  # return msg
+
+
+
+
+
+
+
+                payload = '{}/{}-{}-payload-{}'.format(
+                        nPerson, nPerson, nPerson, i)
+
+                print('Publishing message {}/{}: \'{}\' to {}'.format(
+                        i, num_messages, payload, device_topic))
+                client.publish(
+                        device_topic, '{} : {}'.format(device_id, payload), qos=1)
+
+                seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
+                if seconds_since_issue > 60 * jwt_exp_mins:
+                    print('Refreshing token after {}s').format(seconds_since_issue)
+                    jwt_iat = datetime.datetime.utcnow()
+                    client = get_client(
+                        project_id, cloud_region, registry_id, gateway_id,
+                        private_key_file, algorithm, ca_certs, mqtt_bridge_hostname,
+                        mqtt_bridge_port)
+
+                time.sleep(5)
 
     detach_device(client, device_id)
 
