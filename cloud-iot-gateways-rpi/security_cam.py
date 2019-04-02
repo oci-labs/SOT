@@ -115,9 +115,20 @@ try:
         #   # 
         # sys.stdout.flush()
 
-        info = {'nPersons': '{}'.format(nPersons), 'bounding_box': '{}'.format(result["bounding_box"]),
-        'scores': '{}'.format(result["scores"])}
-        # info = json.dumps(info)
+        bounding_box = [{'box_0': bb[0],
+                         'box_1': bb[1],
+                         'box_2': bb[2],
+                         'box_3': bb[3]} for bb in result["bounding_box"]]
+
+        scores = [{'score': s[0]} for s in result["scores"]]
+
+        info = {'nPersons': '{}'.format(nPersons), 'bounding_box': bounding_box,
+                'scores': scores}
+
+        # info = {'nPersons': '{}'.format(nPersons), 'bounding_box': '{}'.format(result["bounding_box"]),
+        #         'scores': '{}'.format(result["scores"])}
+        info = json.dumps(info)
+        print(info)
 
         message = MakeMessage(device_id=device_id, action='event', data=info)
 

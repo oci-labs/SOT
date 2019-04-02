@@ -63,11 +63,11 @@ def run(argv=None):
     #     messages = (p
     #                 | beam.io.ReadFromPubSub(subscription=known_args.input_subscription)
     #                 .with_output_types(bytes))
-    output = (p | 'read' >> beam.io.ReadFromPubSub(topic=known_args.input_topic).with_output_types(bytes))
+    output = (p | 'read' >> beam.io.ReadFromPubSub(topic=known_args.input_topic)) #.with_output_types(bytes))
 
-    outpu_2 = (output | 'decode' >> beam.Map(lambda x: x.decode('utf-8')))
+    # outpu_2 = (output | 'decode' >> beam.Map(lambda x: x.decode('utf-8')))
 
-    outpu_2 | 'print' >> beam.Map(lambda x: x)
+    output | 'print' >> beam.Map(lambda x: x)
               # .with_output_types(bytes)
               # | 'window' >> beam.WindowInto(window.FixedWindows(15, 0))
               # | 'decode' >> beam.Map(lambda x: x.decode('utf-8'))

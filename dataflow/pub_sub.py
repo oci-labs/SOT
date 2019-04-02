@@ -21,7 +21,7 @@ if __name__ == '__main__':
 
 
     for n in range(10000):
-        data = {'mk': 'Message'}  #.format(n)
+        data = {'mk': 'Message_{}'.format(n), 'mk_2': [{"a": "c", "b": "d"}]}
         data = json.dumps(data)
         # data = str.encode(data)
         # Data must be a bytestring
@@ -31,3 +31,4 @@ if __name__ == '__main__':
         message_future.add_done_callback(callback)
         time.sleep(1)
         print('Published message IDs:{}'.format(n))
+
