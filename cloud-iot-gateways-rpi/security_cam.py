@@ -125,10 +125,8 @@ try:
         info = {'nPersons': '{}'.format(nPersons), 'bounding_box': bounding_box,
                 'scores': scores}
 
-        # info = {'nPersons': '{}'.format(nPersons), 'bounding_box': '{}'.format(result["bounding_box"]),
-        #         'scores': '{}'.format(result["scores"])}
         info = json.dumps(info)
-        print(info)
+        # print(info)
 
         message = MakeMessage(device_id=device_id, action='event', data=info)
 

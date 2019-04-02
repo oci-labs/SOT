@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ccc5e91a-028f-41e6-b93c-caeec6203b67" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py" beforeDir="false" afterPath="$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataflow/apache_beam_pub_sub_to_bq.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataflow/apache_beam_pub_sub_to_bq.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataflow/df.sh" beforeDir="false" afterPath="$PROJECT_DIR$/dataflow/df.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dataflow/pub_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/dataflow/pub_sub.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,14 +56,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1152">
-              <caret line="130" column="18" selection-start-line="130" selection-start-column="18" selection-end-line="130" selection-end-column="18" />
+            <state relative-caret-position="878">
+              <caret line="122" column="62" selection-start-line="122" selection-start-column="56" selection-end-line="122" selection-end-column="62" />
               <folding>
                 <element signature="e#576#587#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="900">
+              <caret line="45" column="1" lean-forward="true" selection-start-line="45" selection-start-column="1" selection-end-line="45" selection-end-column="1" />
             </state>
           </provider>
         </entry>
@@ -106,6 +113,7 @@
         <option value="$PROJECT_DIR$/dataflow/df.sh" />
         <option value="$PROJECT_DIR$/dataflow/apache_beam_pub_sub_to_bq.py" />
         <option value="$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py" />
+        <option value="$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json" />
       </list>
     </option>
   </component>
@@ -173,7 +181,7 @@
     <frame x="0" y="-2" width="1200" height="1922" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.24384028" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24384028" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -184,7 +192,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Version Control" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" visible="true" weight="0.21695483" />
+      <window_info anchor="bottom" id="Terminal" order="8" visible="true" weight="0.21695483" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Python Console" order="10" weight="0.21583937" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -253,11 +261,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1152">
-          <caret line="130" column="18" selection-start-line="130" selection-start-column="18" selection-end-line="130" selection-end-column="18" />
+        <state relative-caret-position="878">
+          <caret line="122" column="62" selection-start-line="122" selection-start-column="56" selection-end-line="122" selection-end-column="62" />
           <folding>
             <element signature="e#576#587#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="900">
+          <caret line="45" column="1" lean-forward="true" selection-start-line="45" selection-start-column="1" selection-end-line="45" selection-end-column="1" />
         </state>
       </provider>
     </entry>
