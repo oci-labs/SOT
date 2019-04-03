@@ -309,6 +309,7 @@ def mqtt_device_demo(args):
     engine = DetectionEngine('./edgetpu/test_data/mobilenet_ssd_v2_face_quant_postprocess_edgetpu.tflite')
     # labels = ReadLabelFile(args_tpu.label) if args_tpu.label else None
 
+    # initializing the camera
     with picamera.PiCamera() as camera:
         camera.resolution = (1024, 768)
         camera.framerate = 30
