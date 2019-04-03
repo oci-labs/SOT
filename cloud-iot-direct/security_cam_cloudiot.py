@@ -31,10 +31,10 @@ import numpy as np
 
 logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.CRITICAL)
 
-# The initial backoff time after a disconnection occurs, in seconds.
+# The initial back-off time after a disconnection occurs, in seconds.
 minimum_backoff_time = 1
 
-# The maximum backoff time before giving up, in seconds.
+# The maximum back-off time before giving up, in seconds.
 MAXIMUM_BACKOFF_TIME = 32
 
 # Whether to wait with exponential back-off before publishing.
