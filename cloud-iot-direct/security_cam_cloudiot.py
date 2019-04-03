@@ -289,6 +289,18 @@ def parse_command_line_args():
     return parser.parse_args()
 
 
+def change_info_list(window=None, list=None, nPerson=None):
+    info={}
+    list.append(int(nPerson))
+    if len(list) > window:
+        list.pop(0)
+
+    info['nPersons_max_' + str(window)] = float(np.max(list))
+    info['nPersons_min_' + str(window)] = float(np.min(list))
+    info['nPersons_mean_' + str(window)] = float(np.mean(list))
+    return list, info
+
+
 def mqtt_device_demo(args):
     """Connects a device, sends data, and receives data."""
     # [START iot_mqtt_run]
@@ -376,17 +388,7 @@ def mqtt_device_demo(args):
 
                 ###################################
 
-                def change_info_list(window=None, list=None, nPerson=None):
-                    info={}
-                    list.append(int(nPerson))
-                    if len(list) > window:
-                        list.pop(0)
-
-                    info['nPersons_max_' + str(window)] = np.max(list)
-                    info['nPersons_min_' + str(window)] = np.min(list)
-                    info['nPersons_mean_' + str(window)] = np.mean(list)
-                    return list, info
-
+                
 
                 try:
                     list_30, info_30 = change_info_list(window=30, list=list_30, nPerson=nPerson)
