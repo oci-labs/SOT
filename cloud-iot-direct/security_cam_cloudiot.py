@@ -374,6 +374,37 @@ def mqtt_device_demo(args):
                 info = {'nPersons': '{}'.format(nPerson), 'bounding_box': bounding_box,
                         'scores': scores_msg, 'TimeStamp': str(now)}
 
+                ###################################
+
+                def change_info_list(window=None, list=None, nPerson=None):
+                    info={}
+                    list.append(int(nPerson))
+                    if len(list) > window:
+                        list.pop(0)
+
+                    info['nPersons_max_' + str(window)] = np.max(list)
+                    info['nPersons_min_' + str(window)] = np.min(list)
+                    info['nPersons_mean_' + str(window)] = np.mean(list)
+                    return list, info
+
+
+                try:
+                    list_30, info_30 = change_info_list(window=30, list=list_30, nPerson=nPerson)
+                except:
+                    list_30 = []
+                    list_30, info_30 = change_info_list(window=30, list=list_30, nPerson=nPerson)
+
+                try:
+                    list_300, info_300 = change_info_list(window=300, list=list_300, nPerson=nPerson)
+                except:
+                    list_300 = []
+                    list_300, info_300 = change_info_list(window=300, list=list_300, nPerson=nPerson)
+
+                info.update(info_30)
+                info.update(info_300)
+
+                ###################################
+
                 info = json.dumps(info)
 
                 payload = info
