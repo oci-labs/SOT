@@ -57,7 +57,6 @@ should_backoff = False
 
 # [START iot_mqtt_jwt]
 def create_jwt(project_id, private_key_file, algorithm):
-
     token = {
         # The time that the token was issued at
         'iat': datetime.datetime.utcnow(),
@@ -202,6 +201,7 @@ def send_data_from_bound_device(
         mqtt_bridge_hostname, mqtt_bridge_port, jwt_expires_minutes, payload):
     pass
 
+
 def parse_command_line_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description=(
@@ -289,15 +289,15 @@ def parse_command_line_args():
     return parser.parse_args()
 
 
-def change_info_list(window=None, list=None, nPerson=None):
-    info={}
+def change_info_list(window=None, list=None, nPerson=None, length=None):
+    info = {}
     list.append(int(nPerson))
     if len(list) > window:
         list.pop(0)
 
-    info['nPersons_max_' + str(window)] = float(np.max(list))
-    info['nPersons_min_' + str(window)] = float(np.min(list))
-    info['nPersons_mean_' + str(window)] = float(np.mean(list))
+    info['nPersons_max_' + length] = float(np.max(list))
+    info['nPersons_min_' + length] = float(np.min(list))
+    info['nPersons_mean_' + length] = float(np.mean(list))
     return list, info
 
 
@@ -372,14 +372,14 @@ def mqtt_device_demo(args):
                         # print ('box = ', box)
                         bbox.append(box)
                         scores.append(score)
-                    msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
+                    msg = {"nPersons": int(nPerson), "bounding_box": str(bbox), "scores": str(scores)}
                 else:
-                    msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
-                
+                    msg = {"nPersons": int(nPerson), "bounding_box": str(bbox), "scores": str(scores)}
+
                 bounding_box = [{'box_0': bb[0],
-                         'box_1': bb[1],
-                         'box_2': bb[2],
-                         'box_3': bb[3]} for bb in eval(msg["bounding_box"])]
+                                 'box_1': bb[1],
+                                 'box_2': bb[2],
+                                 'box_3': bb[3]} for bb in eval(msg["bounding_box"])]
 
                 scores_msg = [{'score': s[0]} for s in eval(msg["scores"])]
 
@@ -388,22 +388,24 @@ def mqtt_device_demo(args):
 
                 ###################################
 
-                
+                try:
+                    list_short, info_short = change_info_list(window=30, list=list_short, nPerson=nPerson,
+                                                              length='short')
+                except:
+                    list_short = []
+                    list_short, info_short = change_info_list(window=30, list=list_short, nPerson=nPerson,
+                                                              length='short')
 
                 try:
-                    list_30, info_30 = change_info_list(window=30, list=list_30, nPerson=nPerson)
+                    list_long, info_long = change_info_list(window=300, list=list_long, nPerson=nPerson,
+                                                            length='long')
                 except:
-                    list_30 = []
-                    list_30, info_30 = change_info_list(window=30, list=list_30, nPerson=nPerson)
+                    list_long = []
+                    list_long, info_long = change_info_list(window=300, list=list_long, nPerson=nPerson,
+                                                            length='long')
 
-                try:
-                    list_300, info_300 = change_info_list(window=300, list=list_300, nPerson=nPerson)
-                except:
-                    list_300 = []
-                    list_300, info_300 = change_info_list(window=300, list=list_300, nPerson=nPerson)
-
-                info.update(info_30)
-                info.update(info_300)
+                info.update(list_short)
+                info.update(list_long)
 
                 ###################################
 
@@ -428,11 +430,12 @@ def mqtt_device_demo(args):
                 # delivery.
                 client.publish(mqtt_topic, payload, qos=1)
 
-        # Send events every second. State should not be updated as often
+                # Send events every second. State should not be updated as often
                 time.sleep(1 if args.message_type == 'event' else 5)
-    
+
         finally:
-          camera.stop_preview()
+            camera.stop_preview()
+
 
 def main():
     args = parse_command_line_args()
