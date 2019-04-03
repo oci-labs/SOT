@@ -202,6 +202,7 @@ def send_data_from_bound_device(
         mqtt_bridge_hostname, mqtt_bridge_port, jwt_expires_minutes, payload):
     pass
 
+
 def parse_command_line_args():
     """Parse command line arguments."""
     parser = argparse.ArgumentParser(description=(
@@ -360,14 +361,14 @@ def mqtt_device_demo(args):
                         # print ('box = ', box)
                         bbox.append(box)
                         scores.append(score)
-                    msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
+                    msg = {"nPersons": int(nPerson), "bounding_box": str(bbox), "scores": str(scores)}
                 else:
-                    msg = {"nPersons":int(nPerson), "bounding_box":str(bbox), "scores": str(scores)}
-                
+                    msg = {"nPersons": int(nPerson), "bounding_box": str(bbox), "scores": str(scores)}
+
                 bounding_box = [{'box_0': bb[0],
-                         'box_1': bb[1],
-                         'box_2': bb[2],
-                         'box_3': bb[3]} for bb in eval(msg["bounding_box"])]
+                                 'box_1': bb[1],
+                                 'box_2': bb[2],
+                                 'box_3': bb[3]} for bb in eval(msg["bounding_box"])]
 
                 scores_msg = [{'score': s[0]} for s in eval(msg["scores"])]
 
@@ -389,13 +390,18 @@ def mqtt_device_demo(args):
                         args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
                         args.mqtt_bridge_port)
 
+                # [END iot_mqtt_jwt_refresh]
+                # Publish "payload" to the MQTT topic. qos=1 means at least once
+                # delivery. Cloud IoT Core also supports qos=0 for at most once
+                # delivery.
                 client.publish(mqtt_topic, payload, qos=1)
 
-        # Send events every second. State should not be updated as often
+                # Send events every second. State should not be updated as often
                 time.sleep(1 if args.message_type == 'event' else 5)
-    
+
         finally:
-          camera.stop_preview()
+            camera.stop_preview()
+
 
 def main():
     args = parse_command_line_args()

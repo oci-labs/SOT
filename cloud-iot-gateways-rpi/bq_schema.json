@@ -1,5 +1,10 @@
 [
     {
+        "name": "TimeStamp",
+        "type": "STRING",
+        "mode": "NULLABLE"
+    },
+    {
         "name": "nPersons",
         "type": "STRING",
         "mode": "NULLABLE"
