@@ -404,8 +404,8 @@ def mqtt_device_demo(args):
                     list_long, info_long = change_info_list(window=300, list=list_long, nPerson=nPerson,
                                                             length='long')
 
-                info.update(list_short)
-                info.update(list_long)
+                info.update(info_short)
+                info.update(info_long)
 
                 ###################################
 
