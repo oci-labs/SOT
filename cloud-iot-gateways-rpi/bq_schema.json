@@ -1,51 +1,81 @@
 [
-    {
-        "name": "TimeStamp",
+  {
+    "name": "TimeStamp",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "nPersons",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "nPersons_min_long",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "nPersons_max_long",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "nPersons_mean_long",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "nPersons_min_short",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "nPersons_max_short",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "nPersons_mean_short",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "bounding_box",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "box_0",
         "type": "STRING",
         "mode": "NULLABLE"
-    },
-    {
-        "name": "nPersons",
+      },
+      {
+        "name": "box_1",
         "type": "STRING",
         "mode": "NULLABLE"
-    },
-    {
-        "name": "bounding_box",
-        "type": "RECORD",
-        "mode": "REPEATED",
-        "fields": [
-            {
-                "name": "box_0",
-                "type": "STRING",
-                "mode": "NULLABLE"
-            },
-            {
-                "name": "box_1",
-                "type": "STRING",
-                "mode": "NULLABLE"
-            },
-            {
-                "name": "box_2",
-                "type": "STRING",
-                "mode": "NULLABLE"
-            },
-            {
-                "name": "box_3",
-                "type": "STRING",
-                "mode": "NULLABLE"
-            }
-        ]
-    },
-    {
-        "name": "scores",
-        "type": "RECORD",
-        "mode": "REPEATED",
-        "fields": [
-            {
-                "name": "score",
-                "type": "STRING",
-                "mode": "NULLABLE"
-            }
-        ]
-    }
+      },
+      {
+        "name": "box_2",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "box_3",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "scores",
+    "type": "RECORD",
+    "mode": "REPEATED",
+    "fields": [
+      {
+        "name": "score",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  }
 ]
