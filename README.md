@@ -27,9 +27,12 @@ gcloud services enable bigquery-json.googleapis.com
 
 ## Configure Big Query
 
+From the root directory, create the datasets and the tables using the schema provided in the bigquery directory.
+
 ```
 bq mk --dataset security_dataset
-bq mk --table security_dataset.sot_table [{"type":"STRING","name":"nPersons","mode":"NULLABLE"},{"fields":[{"type":"STRING","name":"box_0","mode":"NULLABLE"},{"type":"STRING","name":"box_1","mode":"NULLABLE"},{"type":"STRING","name":"box_2","mode":"NULLABLE"},{"type":"STRING","name":"box_3","mode":"NULLABLE"}],"type":"RECORD","name":"bounding_box","mode":"REPEATED"},{"fields":[{"type":"STRING","name":"score","mode":"NULLABLE"}],"type":"RECORD","name":"scores","mode":"REPEATED"},{"type":"STRING","name":"TimeStamp"}]
+bq mk --table security_dataset.sot_table bigquery/sot_table.json
+bq mk --table security_dataset.sot_view_table bigquery/sot_view_table.json
 ```
 
 ## Configure Dataflow
