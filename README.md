@@ -31,6 +31,15 @@ bq mk --table security_dataset.sot_table [{"type":"STRING","name":"nPersons","mo
 
 ## Configure Dataflow
 
+We will use the PubSub to BigQuery template to load the data from the device into BigQuery.
+
+>gcloud dataflow jobs run JOB_NAME \
+>    --gcs-location gs://dataflow-templates/latest/PubSub_to_BigQuery \
+>    --parameters \
+> inputTopic=projects/securityofthings/topics/sot-topic,\
+> outputTableSpec=securityofthings:security_dataset.sot_table
+
+
 ## Create an IoT Registry
 We will set up a registry with the name of sot-registry, in us-central1, with project_id of securityofthings. The pub/sub topic is set to sot-topic. 
 
