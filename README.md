@@ -18,11 +18,13 @@ The following is a high level view of the architecture.
 
 
 ## Enable the following APIs:
+```
 gcloud services enable compute.googleapis.com
 gcloud services enable dataflow.googleapis.com
 gcloud services enable pubsub.googleapis.com
 gcloud services enable cloudiot.googleapis.com
 gcloud services enable bigquery-json.googleapis.com
+```
 
 ## Configure Big Query
 
@@ -33,11 +35,12 @@ bq mk --table security_dataset.sot_table [{"type":"STRING","name":"nPersons","mo
 
 We will use the PubSub to BigQuery template to load the data from the device into BigQuery.
 
-```gcloud dataflow jobs run JOB_NAME \
+```
+gcloud dataflow jobs run JOB_NAME \
     --gcs-location gs://dataflow-templates/latest/PubSub_to_BigQuery \
     --parameters \
- inputTopic=projects/securityofthings/topics/sot-topic,\
- outputTableSpec=securityofthings:security_dataset.sot_table
+inputTopic=projects/securityofthings/topics/sot-topic,\
+outputTableSpec=securityofthings:security_dataset.sot_table
  ```
 
 ## Create an IoT Registry
@@ -49,9 +52,17 @@ Create a device with device_id of security-cam-oci in the registry and add the p
 ## Setup Security Camera
 Setup the Coral USB Accelerator which a USB device that provides an Edge TPU as a coprocessor for the Raspberry Pi. Follow the steps from here: https://coral.withgoogle.com/tutorials/accelerator/
 
+```
 cd SOT/cloud-iot-direct/
 pip install -r requirements.txt
+```
 
-# Run the following python command (python 3.5): 
+## Run the following python command (python 3.5): 
 
+```
 python3 security_cam_cloudiot.py --registry_id=sot-registry --cloud_region=us-central1 --project_id=securityofthings --device_id=security-cam-oci --algorithm=RS256 --private_key_file=resources/rsa_private.pem 
+```
+## Create a Data Studio View 
+
+
+
