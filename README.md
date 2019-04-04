@@ -16,7 +16,6 @@ The following is a high level view of the architecture.
 
 ![SoT Architecture](/images/SecurityOfThings.png)
 
-
 ## Enable the following APIs:
 ```
 gcloud services enable compute.googleapis.com
@@ -66,5 +65,7 @@ python3 security_cam_cloudiot.py --registry_id=sot-registry --cloud_region=us-ce
 ```
 ## Create a Data Studio View 
 
+Here is an example of the Dashboard created for the camera.
 
+![SoT Architecture](/images/DataStudioDashboard.png)
 
