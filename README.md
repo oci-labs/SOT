@@ -5,7 +5,7 @@ This demo illustrates an IoT solution for a security camera that detects faces l
 Security is provided via authentication for individual devices. For physical security of the device each of these devices has their own secure element to reduce the risk of tampering. The secure elements are to be acquired from a manufacturer (e.g., Microchip  ATECC608A) and the public keys registered in Google cloud IoT in support of the application to leverage these devices. These secure elements are soldered onto the printed circuit board of the cameras at manufacture time. The chip also will validate the firmware with code signature validation to offer a secure boot process. Additional steps for securing the device, such as on on Raspberry Pi can be found here: https://www.raspberrypi.org/documentation/configuration/security.md
 
 ## Standard Scenario:
-* Monitor a secured area with a set of cameras - snapshot every N minutes
+* Monitor a secured area with a set of cameras - snapshot every second
 * Detect faces in the image locally on the security camera using ML model executed using EdgeTPU 
 * Send prediction from ML model to the cloud with an MQTT telemetry topic
 * Process the stream of detections in DataFlow
