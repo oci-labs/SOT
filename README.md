@@ -28,8 +28,10 @@ gcloud services enable bigquery-json.googleapis.com
 
 ## Configure Big Query
 
+```
 bq mk --dataset security_dataset
 bq mk --table security_dataset.sot_table [{"type":"STRING","name":"nPersons","mode":"NULLABLE"},{"fields":[{"type":"STRING","name":"box_0","mode":"NULLABLE"},{"type":"STRING","name":"box_1","mode":"NULLABLE"},{"type":"STRING","name":"box_2","mode":"NULLABLE"},{"type":"STRING","name":"box_3","mode":"NULLABLE"}],"type":"RECORD","name":"bounding_box","mode":"REPEATED"},{"fields":[{"type":"STRING","name":"score","mode":"NULLABLE"}],"type":"RECORD","name":"scores","mode":"REPEATED"},{"type":"STRING","name":"TimeStamp"}]
+```
 
 ## Configure Dataflow
 
