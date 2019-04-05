@@ -1,86 +1,86 @@
 [
   {
-    "mode": "NULLABLE", 
-    "name": "TimeStamp", 
+    "mode": "NULLABLE",
+    "name": "TimeStamp",
     "type": "STRING"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "nPersons", 
+    "mode": "NULLABLE",
+    "name": "nPersons",
     "type": "STRING"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "nPersons_min_long", 
+    "mode": "NULLABLE",
+    "name": "nPersons_min_long",
     "type": "STRING"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "nPersons_max_long", 
+    "mode": "NULLABLE",
+    "name": "nPersons_max_long",
     "type": "STRING"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "nPersons_mean_long", 
+    "mode": "NULLABLE",
+    "name": "nPersons_mean_long",
     "type": "STRING"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "nPersons_min_short", 
+    "mode": "NULLABLE",
+    "name": "nPersons_min_short",
     "type": "STRING"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "nPersons_max_short", 
+    "mode": "NULLABLE",
+    "name": "nPersons_max_short",
     "type": "STRING"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "nPersons_mean_short", 
+    "mode": "NULLABLE",
+    "name": "nPersons_mean_short",
     "type": "STRING"
-  }, 
+  },
   {
     "fields": [
       {
-        "mode": "NULLABLE", 
-        "name": "box_0", 
+        "mode": "NULLABLE",
+        "name": "box_0",
         "type": "STRING"
-      }, 
+      },
       {
-        "mode": "NULLABLE", 
-        "name": "box_1", 
+        "mode": "NULLABLE",
+        "name": "box_1",
         "type": "STRING"
-      }, 
+      },
       {
-        "mode": "NULLABLE", 
-        "name": "box_2", 
+        "mode": "NULLABLE",
+        "name": "box_2",
         "type": "STRING"
-      }, 
+      },
       {
-        "mode": "NULLABLE", 
-        "name": "box_3", 
+        "mode": "NULLABLE",
+        "name": "box_3",
         "type": "STRING"
       }
-    ], 
-    "mode": "REPEATED", 
-    "name": "bounding_box", 
+    ],
+    "mode": "REPEATED",
+    "name": "bounding_box",
     "type": "RECORD"
-  }, 
+  },
   {
     "fields": [
       {
-        "mode": "NULLABLE", 
-        "name": "score", 
+        "mode": "NULLABLE",
+        "name": "score",
         "type": "STRING"
       }
-    ], 
-    "mode": "REPEATED", 
-    "name": "scores", 
+    ],
+    "mode": "REPEATED",
+    "name": "scores",
     "type": "RECORD"
-  }, 
+  },
   {
-    "mode": "NULLABLE", 
-    "name": "time", 
+    "mode": "NULLABLE",
+    "name": "Second",
     "type": "INTEGER"
   }
 ]
