@@ -3,11 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="ccc5e91a-028f-41e6-b93c-caeec6203b67" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< HEAD
       <change beforePath="$PROJECT_DIR$/dataflow/apache_beam_pub_sub_to_bq.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dataflow/df.sh" beforeDir="false" afterPath="$PROJECT_DIR$/dataflow/df.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dataflow/pub_sub.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dataflow/pubsub.sh" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/dataflow/trial.py" beforeDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json" beforeDir="false" afterPath="$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json" afterDir="false" />
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,8 +24,16 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cloud-iot-direct/security_cam_cloudiot.py">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="540">
               <caret line="27" column="18" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="18" />
+=======
+            <state relative-caret-position="1120">
+              <caret line="69" column="45" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
+              <folding>
+                <element signature="e#0#38#0" expanded="true" />
+              </folding>
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
             </state>
           </provider>
         </entry>
@@ -29,17 +41,86 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dataflow/df.sh">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="80">
               <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+=======
+            <state relative-caret-position="20">
+              <caret line="1" column="61" selection-start-line="1" selection-start-column="61" selection-end-line="1" selection-end-column="61" />
             </state>
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dataflow/pubsub.sh">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="17" selection-start-column="17" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dataflow/pub_sub.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="640">
+              <caret line="34" selection-start-line="34" selection-end-line="34" />
+              <folding>
+                <element signature="e#0#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="2180">
+              <caret line="122" column="66" selection-start-line="122" selection-start-column="66" selection-end-line="122" selection-end-column="66" />
+              <folding>
+                <element signature="e#576#587#0" expanded="true" />
+              </folding>
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
+            </state>
+          </provider>
+        </entry>
+      </file>
+<<<<<<< HEAD
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/dataflow/bq_schema.json">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="1232">
               <caret line="81" selection-start-line="81" selection-end-line="81" />
+=======
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud-iot-direct/security_cam_cloudiot.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="7460">
+              <caret line="394" column="37" selection-start-line="394" selection-start-column="37" selection-end-line="394" selection-end-column="37" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="940">
+              <caret line="47" column="24" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/requirements-pi.txt">
+          <provider selected="true" editor-type-id="text-editor" />
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dataflow/trial.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="440">
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
             </state>
           </provider>
         </entry>
@@ -64,11 +145,14 @@
         <option value="$PROJECT_DIR$/dataflow/pubsub.sh" />
         <option value="$PROJECT_DIR$/dataflow/pub_sub.py" />
         <option value="$PROJECT_DIR$/dataflow/apache_beam_pub_sub_to_bq.py" />
-        <option value="$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json" />
         <option value="$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py" />
         <option value="$PROJECT_DIR$/cloud-iot-direct/security_cam_cloudiot.py" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/dataflow/df.sh" />
         <option value="$PROJECT_DIR$/dataflow/bq_schema.json" />
+=======
+        <option value="$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json" />
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
       </list>
     </option>
   </component>
@@ -89,6 +173,11 @@
             <path>
               <item name="SOT" type="b2602c69:ProjectViewProjectNode" />
               <item name="SOT" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="SOT" type="b2602c69:ProjectViewProjectNode" />
+              <item name="SOT" type="462c0819:PsiDirectoryNode" />
+              <item name="dataflow" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="SOT" type="b2602c69:ProjectViewProjectNode" />
@@ -134,9 +223,12 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-2" width="1200" height="1922" extended-state="6" />
-    <editor active="true" />
     <layout>
+<<<<<<< HEAD
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28207308" />
+=======
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24384028" />
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -156,6 +248,7 @@
     </layout>
   </component>
   <component name="editorHistoryManager">
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/roots.pem" />
     <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/requirements-pi.txt" />
     <entry file="file://$PROJECT_DIR$/dataflow/trial.py" />
@@ -169,11 +262,35 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="540">
           <caret line="27" column="18" selection-start-line="27" selection-start-column="18" selection-end-line="27" selection-end-column="18" />
+=======
+    <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/roots.pem">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="520">
+          <caret line="26" column="22" selection-start-line="26" selection-start-column="22" selection-end-line="26" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/rsa_private.pem">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="240">
+          <caret line="12" column="10" selection-start-line="12" selection-start-column="10" selection-end-line="12" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataflow/apache_beam_pub_sub_to_bq.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1120">
+          <caret line="69" column="45" selection-start-line="69" selection-start-column="45" selection-end-line="69" selection-end-column="45" />
+          <folding>
+            <element signature="e#0#38#0" expanded="true" />
+          </folding>
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dataflow/df.sh">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="80">
           <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
         </state>
@@ -183,6 +300,61 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1232">
           <caret line="81" selection-start-line="81" selection-end-line="81" />
+=======
+        <state relative-caret-position="20">
+          <caret line="1" column="61" selection-start-line="1" selection-start-column="61" selection-end-line="1" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataflow/pubsub.sh">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="17" selection-start-column="17" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataflow/pub_sub.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="640">
+          <caret line="34" selection-start-line="34" selection-end-line="34" />
+          <folding>
+            <element signature="e#0#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/security_cam.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2180">
+          <caret line="122" column="66" selection-start-line="122" selection-start-column="66" selection-end-line="122" selection-end-column="66" />
+          <folding>
+            <element signature="e#576#587#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud-iot-direct/security_cam_cloudiot.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="7460">
+          <caret line="394" column="37" selection-start-line="394" selection-start-column="37" selection-end-line="394" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/requirements-pi.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dataflow/trial.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="440">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cloud-iot-gateways-rpi/bq_schema.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="940">
+          <caret line="47" column="24" selection-start-line="47" selection-start-column="24" selection-end-line="47" selection-end-column="24" />
+>>>>>>> e7027ae6a1424d932c2995c587eab99d8cc5427b
         </state>
       </provider>
     </entry>
