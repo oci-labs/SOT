@@ -72,3 +72,6 @@ Here is an example of the Dashboard created for the camera.
 
 ![SoT Architecture](/images/DataStudioDashboard.png)
 
+Here is the dashboard which can only be accessed by authorized accounts.
+
+https://datastudio.google.com/u/0/reporting/1vA4WENo0HcRHPUCXTGmMQbeJyJqj1mkE/page/o2Qm
