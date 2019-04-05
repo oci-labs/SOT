@@ -1,5 +1,5 @@
-python apache_beam_pub_sub_to_bq.py \
-    --input_topic=projects/securityofthings/topics/mk_topic_6 \
-    --output_path=gs://pub_sub_temp/temp/ \
-    --input_subscription=projects/securityofthings/subscriptions/sot-subscription \
-    --experiments=allow_non_updatable_job
+gcloud dataflow jobs run JOB_NAME \
+    --gcs-location gs://dataflow-templates/latest/PubSub_to_BigQuery \
+    --parameters \
+inputTopic=projects/securityofthings/topics/sot-topic,\
+outputTableSpec=securityofthings:security_dataset.sot_table
